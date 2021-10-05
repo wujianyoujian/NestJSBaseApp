@@ -1,4 +1,5 @@
 import { AfterInsert, AfterUpdate, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Exclude, Transform } from 'class-transformer';
 
 @Entity()
 export class User {
@@ -6,18 +7,10 @@ export class User {
   id: number;
 
   @Column()
+  @Transform(({ value }) => `${value}_new`)
   email: string;
 
   @Column()
+  @Exclude()
   password: string;
-
-  @AfterInsert()
-  loggerAfterInsert() {
-    console.log('insert this user with id is:' + this.id);
-  }
-
-  @AfterUpdate()
-  loggerAfterUpdate() {
-    console.log('update this user with id is:' + this.id);
-  }
 }

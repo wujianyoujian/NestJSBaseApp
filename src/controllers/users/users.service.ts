@@ -14,8 +14,9 @@ export class UsersService {
     return Promise.resolve();
   }
 
-  async findByEmail(email: string): Promise<User> {
-    return await this.rep.findOne({ email: email });
+  async findByEmail(email: string): Promise<User | ''> {
+    const user = await this.rep.findOne({ email: email });
+    return user || '';
   }
 
   async findAll(): Promise<Array<User>> {

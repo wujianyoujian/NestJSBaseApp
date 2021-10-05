@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, Query, UseInterceptors } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
 
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('users')
 export class UsersController {
   constructor(private userService: UsersService) {}
@@ -11,9 +12,9 @@ export class UsersController {
     return this.userService.findAll();
   }
 
-  @Get('query')
-  findByEmail(@Query() query: Partial<CreateUserDto>) {
-    return this.userService.findByEmail(query.email);
+  @Get('params')
+  findByEmail(@Query('email') email: string) {
+    return this.userService.findByEmail(email);
   }
 
   @Put(':id')

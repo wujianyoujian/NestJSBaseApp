@@ -17,7 +17,7 @@ export class BaseExceptionFilter implements ExceptionFilter {
     }
     const errorResponse = {
       code: -1,
-      message: message || '请求失败',
+      message: message || '请求失败'
     };
     const status = exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
 

@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
-import { ReportsModule } from './reports/reports.module';
+import { UsersModule } from './controllers/users/users.module';
+import { AuthModule } from './controllers/auth/auth.module';
+import { ReportsModule } from './controllers/reports/reports.module';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './users/users.entity';
-import { Report } from './reports/reports.entity';
+import { User } from './controllers/users/users.entity';
+import { Report } from './controllers/reports/reports.entity';
+import { AuthController } from './controllers/auth/auth.controller';
 
 @Module({
   imports: [
@@ -18,12 +18,13 @@ import { Report } from './reports/reports.entity';
       password: 'approximately',
       database: 'car',
       entities: [User, Report],
-      synchronize: true,
+      synchronize: true
     }),
     UsersModule,
-    ReportsModule,
+    AuthModule,
+    ReportsModule
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: []
 })
 export class AppModule {}

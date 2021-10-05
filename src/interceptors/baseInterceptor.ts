@@ -1,4 +1,4 @@
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
+import { CallHandler, ExecutionContext, HttpException, HttpStatus, Injectable, NestInterceptor } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -16,12 +16,15 @@ export class BaseTransformInterceptor<T> implements NestInterceptor<T, Response<
   intercept(context: ExecutionContext, next: CallHandler<T>): Observable<Response<T>> {
     return next.handle().pipe(
       map((data) => {
+        if (!data) {
+          throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+        }
         return {
           code: 0,
           data: data,
-          message: '请求成功',
+          message: '请求成功'
         };
-      }),
+      })
     );
   }
 }
