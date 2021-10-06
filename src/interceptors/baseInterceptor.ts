@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 interface Response<T> {
-  data: T;
+  data?: T;
 
   [propsName: string]: any;
 }
@@ -17,13 +17,16 @@ export class BaseTransformInterceptor<T> implements NestInterceptor<T, Response<
     return next.handle().pipe(
       map((data) => {
         if (!data) {
-          throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+          throw new HttpException('Data Not Found', HttpStatus.NOT_FOUND);
         }
-        return {
-          code: 0,
-          data: data,
-          message: '请求成功'
-        };
+        return Object.assign(
+          {},
+          {
+            code: 0,
+            message: (typeof data === 'string' && data) || '请求成功'
+          },
+          (data instanceof Object && {data}) || {}
+        );
       })
     );
   }

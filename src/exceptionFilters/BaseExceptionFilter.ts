@@ -9,15 +9,10 @@ export class BaseExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest();
     const response = ctx.getResponse();
 
-    let message = exception.message;
-    let isDeepestMessage = false;
-    while (!isDeepestMessage) {
-      isDeepestMessage = !message.message;
-      message = isDeepestMessage ? message : message.message;
-    }
+    const message = exception?.response?.message || exception.message
     const errorResponse = {
       code: -1,
-      message: message || '请求失败'
+      message: String(message) || '请求失败',
     };
     const status = exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
 

@@ -8,10 +8,9 @@ import { User } from './users.entity';
 export class UsersService {
   constructor(@InjectRepository(User) private rep: Repository<User>) {}
 
-  async register(data: CreateUserDto): Promise<void> {
+  async register(data: CreateUserDto): Promise<CreateUserDto & User> {
     const user: CreateUserDto = this.rep.create(data);
-    await this.rep.save(user);
-    return Promise.resolve();
+    return await this.rep.save(user);
   }
 
   async findByEmail(email: string): Promise<User | ''> {

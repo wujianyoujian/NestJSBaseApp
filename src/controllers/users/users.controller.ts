@@ -22,11 +22,6 @@ export class UsersController {
     return this.userService.update(id, attr);
   }
 
-  @Post('register')
-  register(@Body() user: CreateUserDto) {
-    return this.userService.register(user);
-  }
-
   @Delete(':id')
   delete(@Param('id') id: number) {
     return this.userService.delete(id);

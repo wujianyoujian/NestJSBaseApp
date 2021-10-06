@@ -118,4 +118,38 @@ export class UsersController {
 
 ```
 
+#### 密码加密
+* 使用盐和哈希进行加密，用相同盐加密的密码和原来的密码做比较来进行登录
+```typescript
+async register(data: CreateUserDto) {
+  const user = await this.userService.findByEmail(data.email);
+  if (user) {
+    throw new HttpException('email is used', HttpStatus.BAD_REQUEST);
+  }
+  const salt = randomBytes(8).toString('hex');
+  const hash_password = (await scrypt(data.password, salt, 32)) as Buffer;
+  const encrypt_password = salt + '.' + hash_password.toString('hex');
+  return await this.userService.register({ email: data.email, password: encrypt_password });
+}
+
+async login(data: CreateUserDto) {
+  const user = await this.userService.findByEmail(data.email);
+  if (!user) {
+      throw new HttpException('this user is not registered', HttpStatus.NOT_FOUND);
+  }
+  const [salt, storedPassword] = user.password.split('.');
+  const validPassword = ((await scrypt(data.password, salt, 32)) as Buffer).toString('hex');
+  
+  if (storedPassword !== validPassword) {
+    throw new HttpException('password is wrong', HttpStatus.BAD_REQUEST);
+  }
+  return 'login successes';
+}
+```
+## 认证
+
+### cookie
+
+### JWT
+
 ## 数据库迁移
