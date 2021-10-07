@@ -18,12 +18,12 @@ export class UsersController {
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() attr: Partial<CreateUserDto>) {
+  update(@Param('id') id: string, @Body() attr: Partial<CreateUserDto>) {
     return this.userService.update(id, attr);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: number) {
+  delete(@Param('id') id: string) {
     return this.userService.delete(id);
   }
 }

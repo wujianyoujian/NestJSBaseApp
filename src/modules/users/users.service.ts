@@ -22,7 +22,7 @@ export class UsersService {
     return await this.rep.find();
   }
 
-  async update(id: number, attr: Partial<User>) {
+  async update(id: string, attr: Partial<User>) {
     let user = await this.rep.findOne({ id: id });
     if (!user?.id) {
       throw new HttpException('user not found', HttpStatus.NOT_FOUND);
@@ -31,7 +31,7 @@ export class UsersService {
     return await this.rep.update(user.id, user);
   }
 
-  async delete(id: number) {
+  async delete(id: string) {
     const user = await this.rep.findOne({ id: id });
     if (!user?.id) {
       throw new HttpException('user not found', HttpStatus.NOT_FOUND);

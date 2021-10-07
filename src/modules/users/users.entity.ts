@@ -4,8 +4,9 @@ import { IsNotEmpty } from 'class-validator';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @Column()
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   @IsNotEmpty()
