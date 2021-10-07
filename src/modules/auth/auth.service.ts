@@ -3,12 +3,13 @@ import { UsersService } from '../users/users.service';
 import { CreateUserDto } from '../users/dtos/create-user.dto';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
+import { JwtService } from '@nestjs/jwt';
 
 const scrypt = promisify(_scrypt);
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UsersService) {}
+  constructor(private userService: UsersService, private readonly jwtService: JwtService) {}
 
   async register(data: CreateUserDto) {
     const user = await this.userService.findByEmail(data.email);
@@ -21,7 +22,13 @@ export class AuthService {
     return await this.userService.register({ email: data.email, password: encrypt_password });
   }
 
-  async login(data: CreateUserDto) {
+  async login(payload: any) {
+    return {
+      access_token: this.jwtService.sign(payload)
+    };
+  }
+
+  async validateUser(data: CreateUserDto): Promise<any> {
     const user = await this.userService.findByEmail(data.email);
     if (!user) {
       throw new HttpException('this user is not registered', HttpStatus.NOT_FOUND);
@@ -31,7 +38,9 @@ export class AuthService {
 
     if (storedPassword !== validPassword) {
       throw new HttpException('password is wrong', HttpStatus.BAD_REQUEST);
+    } else {
+      const { password, ...result } = user;
+      return result;
     }
-    return 'login successes';
   }
 }

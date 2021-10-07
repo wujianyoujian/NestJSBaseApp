@@ -71,13 +71,15 @@ createMessage(@Body() body: CreateMessageDto) {
 
 ## 使用TypeORM
 
-`pnpm i --save @nest/typeorm typeorm mysql`
-
-### Entity
+---
 
 [Database Link](https://docs.nestjs.com/techniques/database)
 
----
+> `pnpm i --save @nest/typeorm typeorm mysql`
+
+1. 
+
+
 
 #### 处理和过滤返回的数据
 使用`class-transoformer`配合拦截器，过滤返回的数据
