@@ -4,31 +4,34 @@
 
 ## `Installation`
 
-从头开始创建新项目，选择pnpm
+1. 从头开始创建新项目，选择pnpm
+安装`cli`
+> `pnpm add -g @nestjs/cli`  
 
+2. 创建项目
 > `nest new <name>`
 
-如果出现<font color="#f00">module not found</font>问题，执行下面命令
+3. 如果出现<font color="#f00">module not found</font>问题，执行下面命令
 > `rimraf node_modules`
 
 > `pnpm i`
 
-自动生成各种文件
+4. 自动生成各种文件
 > `nest g module | controller | service <name>`
 
-## `Running the server`
-
+5. 启动服务
 运行服务并且监听文件的变化
 > `pnpm run start --watch`
 
-## 控制器
-
+## 控制器 Controller
+* 负责处理传入的请求和返回客户端的响应
+  > 一般为过渡层，接受和返回数据，处理使用service进行
 ### GET
 
 * 获取url中的参数 如`/user/12?timestamp=1233896783`
 
-> 12 - param  
-> timestamp=1233896783 - query
+> `12` - `param`  
+> `timestamp=1233896783` - `query`
 
 ```ts
 @Controller('user')
@@ -42,9 +45,33 @@ class User {
 
 ### POST
 
-#### 全局的 pipe validation
+---
 
-#### 单个pipe
+控制器写好了之后，还需要再所属的`module`中进行引用
+
+```ts
+import { Module } from '@nestjs/common';
+import { UsersController } from './users.controller';
+
+@Module({
+  controllers: [UsersController],
+})
+export class UsersModule {}
+```
+
+## 提供者 Provider
+
+## 管道
+* 转换
+  > 将输入数据转为所需的数据输出
+  > 可能密码是前端明文的形式，后端再pipe就可以进行加密或者加盐
+* 验证 
+  > 对输入数据进行验证，如果验证成功就继续执行代码，失败抛出异常
+  > 校验格式，如手机号码格式
+
+<!-- ### 全局的 pipe validation
+
+### 单个pipe
 
 * 设置pipe，验证数据的正确性
 
@@ -63,11 +90,11 @@ export class CreateMessageDto {
 createMessage(@Body() body: CreateMessageDto) {
   return body;
 }
-```
+``` -->
 
-## 管道
-
-## 异常
+## 过滤
+### 异常过滤器
+* 负责处理应用程序中抛出的异常
 
 ## 拦截
 
